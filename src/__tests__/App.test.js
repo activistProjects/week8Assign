@@ -1,4 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { toHaveTextContent } from '@testing-library/jest-dom/dist/matchers';
+import { render, screen, fireEvent, getByTestId, getByText } from '@testing-library/react';
 import App from '../App';
 
 // Jest hooks:
@@ -77,14 +78,30 @@ describe('Testing <TodoForm />', () => {
 describe('Testing <Todo/> functionality', () => {
 
   test('a new todo is deleted', async () => {
+    const todos= render(<App />);
 
-      // .. your code here
-  
+    // RTL: https://testing-library.com/docs/queries/byrole
+    const buttonErase = screen.getAllByTestId('erase');
+    const counter = todos.getByTestId('todoCount');
+    
+    fireEvent.click(buttonErase[2]);
+    
+    // RTL: https://testing-library.com/docs/queries/bytext
+    await expect(counter.textContent).toBe('2 todos');
+    
   });
 
   test('a new todo is completed', async () => {
 
-     // .. your code here
+    const todos= render(<App />);
+
+    // RTL: https://testing-library.com/docs/queries/byrole
+    const buttonErase = screen.getAllByTestId('mark');
+    
+    fireEvent.click(buttonErase[2]);
+    
+    // RTL: https://testing-library.com/docs/queries/bytext
+    await expect(buttonErase[2].textContent).toBe("Not done");
   
   });
 
